@@ -1,0 +1,4 @@
+*** Error at (14,20): incompatible operands: string + int
+*** Error at (14,24): incompatible operands: string + string
+*** Error at (14,30): incompatible operands: string + int
+*** Error at (14,34): incompatible operands: string + string

@@ -1,0 +1,11 @@
+\documentclass[UTF8]{ctexart}
+\begin{document}
+\begin{center}
+PA1
+计76 沈诣博 2017011427
+\end{center}
+本人做的工作一览：\\
+首先,本人改进了Lexer.java词法分析文件，增添了scopy，sealed，default,in和foreach关键字，帮助实现串行条件卫视语句的符号"|||"，var关键字，以及其他一维数组相关的关键字("++","\%\%"与"["和"]")。\\
+然后，本人参照readme中的规范改进了Parser.java的语法树，增进了上述功能，成功的支持了对象复制语句，sealed限制对象继承，多行条件卫士语句，数组常量的。\\
+改进了Tree.java文件，新增了Scopy类以处理对象复制语句，SubStmt,GuardStmt类来处理条件卫士语句，VarIdent、Vardef类以处理var关键字修饰的变量，ForeachLoop类以处理Foreach语句，ArrayConst类处理数组，BinArrayConst类处理数组拼接，TimeArrayConst类以处理数组初始化常量；Travail类处理取子算符表达式，DefaultConst类处理default算符，改进了ClassDef类处理sealed关键字。
+\end{document}

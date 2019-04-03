@@ -1,0 +1,2 @@
+*** Error at (16): test expression must have bool type
+*** Error at (21): Array Operation on non-array type

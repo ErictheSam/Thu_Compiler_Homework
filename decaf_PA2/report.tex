@@ -1,0 +1,55 @@
+\documentclass[UTF8]{ctexart}
+\begin{document}
+\begin{center}
+PA2实验报告\\
+计76 沈诣博 2017011427\\
+\end{center}
+本人在这一次而实验中完成了以下任务:\\\\
+1.类的浅复制的实现:\\
+根据新的题意,修改了/frontend/parser.y,将scopy(String,Expr)的文法改为了scopy(LValue,Expr).\\
+修改了/tree/tree.java文件,在ASL树中增加Tree.Scopy类,存储Scopy语句中的ident和expr,以及它们的相应位置.\\
+修改了/typecheck/BuildSym.java文件,增加了visitScopy的函数重载,在第一轮遍历的时候访问Expr语句,以确认该语句内是否有对象的创建.\\
+修改了/typecheck/TypeCheck.java文件,重载了visitScopy函数,实现了如下功能:
+\par 1.遍历访问其中的LValue语句和Expr语句
+\par 2.检查LValue语句是否归约为class变量,否则报告BadScopyArgError错误
+\par 3.在上一条没有错的情况下检查LValue语句是否和Expr语句类型相同,否则报告BadScopySrcError错误
+\par 4.检查Expr语句是否归约为class变量,否则报告BadScopyArgError错误\\\\
+2.sealed语句的实现:\\
+修改了/frontend/parser.y,新加入sealed文法\\
+修改了/tree/Tree.java文件,在ClassDef类中增加一个布尔变量判断是否为sealed类\\
+修改了/typecheck/BuildSym.java文件,增加了一个set<String>用来存储sealed的类名,在重载的visitTopTree函数中两次遍历所有设计到的类,第一次填充这个set,第二次判断是否继承sealed类\\\\
+3.串行条件卫士的实现:\\
+修改了/frontend/parser.y和/tree/Tree.java文件,具体修改方式如PA1,增加了文法和相应的AVL树节点.\\
+修改了/typecheck/TypeCheck.java文件,重载了visitGuardStmt(新增串行条件卫士)和visitSubStmt(每一个条件-操作关系)函数,遍历访问其中的条件句,判断是否合法.\\\\
+4.简单类型推导的实现:\\
+修改了/frontend/parser.y文件,在构造LValue的时候增加了类型推导文法\\
+修改了/tree/Tree.java文件,在AVL树中增加了VarValue类型继承自LValue,新增String类型存储推导类型的名字\\
+修改了/type/BaseType.java文件,在BaseType类中增加了UNKNOWN静态对象,用来临时标明类型推导变量.\\
+修改了/typecheck/BuildSym.java文件,重载了visitVarValue函数和visitAssign函数.
+\par 对于后者,遍历其等号左的语句,从而遍历到所有合法的VarValue变量.
+\par 对于前者,将所涉及的变量type类型设置为BaseType.UNKNOWN,并判断有误定义冲突从而存储进符号表或者报错.\\
+修改了/typecheck/TypeCheck.java,重载了visitVarValue函数,修改了visitAssign函数.
+\par 对于前者,将所涉及的变量的类型设置为BaseType.UNKNOWN,从而方便报错
+\par 对于后者,新增了简单类型推导的判定,若通过类型判定为推导型,则根据等号右侧式子的类型,或者修改符号表相应域中的变量定义,或者报错.\\\\
+5.数组相关语句的实现:\\
+修改了/frontend/parser.y文件,增加了"Expr \%\% Expr"语句处理初始化语句,"Expr[Expr] default Expr"的default语句和foreach语句.\\
+对于foreach语句,如果文法中最后的一个Stmt非StmtBlock区块,则新建一个StmtBlock,存储该语句并加入AVL树.\\
+修改了/tree/Tree.h文件,增加了TimeArrayConst结点处理初始化语句,DefaultConst结点处理default语句,ForeachLoop结点处理foreach语句\\
+对于ForeachLoop结点,为了应对一般声明变量和类型推导变量两种推导方法,内部封装有VarValue和VarDef两个指针,供调用时选择\\
+修改了/type/BuildSym.java文件,在其中重载了visitForEachLoop函数,按照顺序完成了以下工作:
+\par 1.在符号表table表中加入新的临时域
+\par 2.检查foreach语句,并且将定义的变量或者推导型变量加入符号表
+\par 3.检查block区块中语句\\
+修改了/typecheck/TypeCheck.java文件,依次重载了visitTimeArrayConst,visitDefaultConst和visitForeachLoop函数\\
+对于重载的visitTimeArrayConst函数,其递归遍历了左右两个表达式,并且判定左侧表达式是否合法和右侧表达式是否是int类型,从而决定报错或者通过\\
+对于重载的visitDefaultConst函数,其递归遍历了左表达式,取数的秩,以及右表达式.\\,并依次进行如下操作:
+\par 1.判断左表达式是否合法的数组类型,否则报错,并且将default语句的类型置为有表达式的类型,若右表达式为空类型则置为错误.
+\par 2.判断秩是否为int类型,否则报错.
+\par 3.若左表达式合法,则判断右表达式类型是否等于左表达式,否则报错.\\
+对于重载的visitForeachloop函数,我在遍历表达式的同时跟随遍历中的表达式进行了如下操作:
+\par 1.判断遍历变量是否是类型推导变量
+\par 2.检查被遍历的是否是合法数组,非则报错,是则检查和遍历变量的兼容情况.如果遍历变量是类型推导变量,则类型置为数组基类
+\par 3.检查条件语句是否布尔类型
+\par 4.遍历域中语句块\\\\
+此外,为了兼容修改的操作,我在/typecheck/中间的lexer.c和Semvalue.java中间进行了修改.对于后者,我为了兼容串行卫士,我加入了一个SubStmt(子语句)类型的变量和列表.\\
+\end{document}

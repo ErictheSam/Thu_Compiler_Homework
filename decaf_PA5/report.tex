@@ -1,0 +1,43 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{listings}
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+ backgroundcolor=\color{lightgray}, 
+ basicstyle = \footnotesize,       
+ breakatwhitespace = false,        
+ breaklines = true,                 
+ captionpos = b,                    
+ commentstyle = \color{mygreen}\bfseries,
+ extendedchars = false,             
+ frame =shadowbox, 
+ framerule=0.5pt,
+ keepspaces=true,
+ keywordstyle=\color{blue}\bfseries, % keyword style
+ language = C++,                     % the language of code
+ otherkeywords={string}, 
+ numbers=left, 
+ numbersep=5pt,
+ numberstyle=\tiny\color{mygray},
+ rulecolor=\color{black},         
+ showspaces=false,  
+ showstringspaces=false, 
+ showtabs=false,    
+ stepnumber=1,         
+ stringstyle=\color{mymauve},        % string literal style
+ tabsize=2,          
+ title=\lstname                      
+}
+\begin{document}
+\begin{center}
+PA5实验报告\\
+计76 沈诣博 2017011427
+\end{center}
+\textbf{1.两结点连边的条件}\\
+首先，当两个结点互异而且都属于liveUse集合，则连边，因为它们都处于活跃状态（分别被相对于块首的“后面”tac引用），故不能在同一个寄存器内。\\
+其二，当一个结点在某个tac语句中被引用的时候，它需要和该tac语句的liveOut集合中所有结点（除了它自己）相连，这是因为liveOut集合的定义是在tac语句出口处活跃的变量。\\\\
+\textbf{2.全局优化的条件}\\
+自己的理解，本人原本采用的策略就是全局优化的策略啊...在不同块的liveUse集合之间连边和对块内活跃点和块外活跃点之间连边这种行为本身就是综合分配基本块内外的变量，因此我认为自己的方法做到了全局优化。
+\end{document}

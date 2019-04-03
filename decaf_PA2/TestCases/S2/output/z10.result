@@ -1,0 +1,20 @@
+GLOBAL SCOPE:
+    (1,1) -> class Shit
+    (5,1) -> class Father
+    (17,1) -> class Main
+    CLASS SCOPE OF 'Shit':
+        (2,9) -> variable fucking : int
+    CLASS SCOPE OF 'Father':
+        (6,9) -> variable field : int
+        (7,16) -> variable shat : class : Shit
+        (8,9) -> function method : class : Father->int->int
+        FORMAL SCOPE OF 'method':
+            (8,9) -> variable @this : class : Father
+            (8,20) -> variable @f : int
+            LOCAL SCOPE:
+    CLASS SCOPE OF 'Main':
+        (18,14) -> static function main : void
+        FORMAL SCOPE OF 'main':
+            LOCAL SCOPE:
+                (19,18) -> variable a : class : Father[]
+                (20,16) -> variable b : class : Father
